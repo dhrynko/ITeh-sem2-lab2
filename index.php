@@ -13,41 +13,67 @@ require "db.php";
 </head>
 <body>
 <div class="block">
-    <div>
+    <div id="rent-income">
         <h1>Rent Income By Date</h1>
         <p>Choose date</p>
+        <form action="queries/rent_income.php">
+            <input name="rent-income-date" type="date" value="2014-08-12" min="2014-01-11" max="2021-12-31">
+            <input type="submit" value="Show">
+        </form>
+        <input type="submit" value="Last Result"
+               onclick="displayQuery('rent-income', ['incomeByDate']); disable('rent-input')" id="rent-input">
     </div>
-    <form action="queries/rent_income.php">
-        <input name="rent-income-date" type="date" value="2014-08-12" min="2014-01-11" max="2021-12-31">
-        <input type="submit" value="Show">
-    </form>
     <br>
     <br>
-    <div>
+    <div id="mileage">
         <h1>Cars with specified mileage</h1>
         <p>(Less or equal)</p>
         <p>Input mileage</p>
+        <form action="queries/cars_with_mileage.php">
+            <input type="text" value="0" name="mileage">
+            <input type="submit" value="Show">
+        </form>
+        <input type="submit" value="Last Result"
+               onclick="displayQuery('mileage', ['requiredMileage', 'carsWithSpecifiedMileage']); disable('mile-input')"
+               id="mile-input">
     </div>
-    <form action="queries/cars_with_mileage.php">
-        <input type="text" value="0" name="mileage">
-        <input type="submit" value="Show">
-    </form>
     <br>
     <br>
     <div class="block">
-        <div>
+        <div id="car-brands">
             <h1>Available car brands</h1>
             <div>
                 <form action="queries/car_brands.php">
                     <input name="brands" type="submit" value="Show">
                 </form>
             </div>
+            <input type="submit" value="Last Result"
+                   onclick="displayQuery('car-brands', ['brands']); disable('brand-input')" id="brand-input">
         </div>
         <br>
         <br>
     </div>
 </div>
 <div></div>
+<script>
+    const disable = (elId) => document.getElementById(elId).setAttribute("disabled", "disabled");
+
+    const createParagraph = (text) => {
+        const node = document.createElement("P");
+        const textNode = document.createTextNode(text);
+        node.appendChild(textNode);
+
+        return node;
+    };
+
+    const displayQuery = (elId, keys) => {
+        const parent = document.getElementById(elId);
+
+        localStorage.getItem(keys[0])
+            ? keys.map(key => parent.appendChild(createParagraph(localStorage.getItem(key))))
+            : parent.appendChild(createParagraph("No queries yet"));
+    }
+</script>
 </body>
 </html>
 
